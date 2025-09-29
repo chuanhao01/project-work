@@ -1,9 +1,9 @@
+"use client"
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 
-function App() {
+export default function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
 
@@ -24,7 +24,7 @@ function App() {
           <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
         </a>
         <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
+          <img src="/react.svg" className="logo react" alt="React logo" />
         </a>
       </div>
       <p>Click on the Tauri, Vite, and React logos to learn more.</p>
@@ -47,5 +47,3 @@ function App() {
     </main>
   );
 }
-
-export default App;
