@@ -1,9 +1,19 @@
 erDiagram
 PROJECT {
-  int id
+  int id PK
   string name
 }
 CATEGORIES {
-  int id
-  int project_id
+  int id PK
+  int project_id FK
+  string name
 }
+TASKS {
+  int id PK
+  int category_id FK
+  string name
+
+}
+
+PROJECT ||--o{ CATEGORIES : has
+CATEGORIES ||--o{ TASKS : has
