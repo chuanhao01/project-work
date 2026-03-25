@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# For react-router
+.react-router/
+
+# For npm builds
+build/
