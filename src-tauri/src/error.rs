@@ -1,3 +1,4 @@
-pub enum AppError{
-    Unknown(String)
+#[derive(Debug, Clone)]
+pub enum AppError {
+    Unknown(String),
 }
