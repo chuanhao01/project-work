@@ -8,9 +8,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::{constants::SETTINGS_FILE_NAME, error::AppError};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct AppSettings {
-    is_darkmode: bool,
+    pub is_darkmode: bool,
 }
 
 impl Default for AppSettings {
@@ -21,7 +21,7 @@ impl Default for AppSettings {
 
 impl Display for AppSettings {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.is_darkmode)
+        write!(f, "is_darkmode: {}", self.is_darkmode)
     }
 }
 
