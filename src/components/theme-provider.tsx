@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAppSettings } from "./AppSettingsProvider";
 
 type Theme = "dark" | "light" | "system";
 
@@ -24,7 +25,12 @@ export function ThemeProvider({
   defaultTheme = "system",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(defaultTheme);
+  const appSettings = useAppSettings();
+  const [theme, setTheme] = useState<Theme>("dark");
+
+  useEffect(() => {
+    setTheme(appSettings.is_darkmode ? "dark" : "light");
+  }, [appSettings])
 
   useEffect(() => {
     const root = window.document.documentElement;

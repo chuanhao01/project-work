@@ -11,7 +11,7 @@ import { type AppSettings, COMMANDS, GLOBAL_EVENTS } from "@/lib/types";
 
 // MAYBE: somehow sync defaults, but should always take from settings.json
 const initialState: AppSettings = {
-  isDarkmode: true,
+  is_darkmode: true,
 };
 const AppSettingsContext = createContext<AppSettings>(initialState);
 

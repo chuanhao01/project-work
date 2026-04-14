@@ -1,5 +1,5 @@
 export type AppSettings = {
-  isDarkmode: boolean;
+  is_darkmode: boolean;
 }
 
 export const GLOBAL_EVENTS = {

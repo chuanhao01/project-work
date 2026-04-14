@@ -11,6 +11,7 @@ function App() {
       <Button
         variant="outline"
         onClick={async () => {
+          await invoke("test_change_settings");
           setMsg(await invoke("greet", { name: "namewa" }));
         }}
       >

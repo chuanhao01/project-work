@@ -3,7 +3,7 @@
 use std::sync::Mutex;
 
 use log::info;
-use tauri::{Emitter, Manager, State};
+use tauri::{AppHandle, Emitter, Manager, State};
 
 use crate::{constants::GlobalEvents, settings::AppSettings};
 
@@ -25,6 +25,18 @@ fn get_settings(state: State<'_, Mutex<AppSettings>>) -> AppSettings {
     state.clone()
 }
 
+#[tauri::command]
+fn test_change_settings(app: AppHandle, state: State<'_, Mutex<AppSettings>>) {
+    let mut state = state.lock().expect("Should be able to aquire lock");
+    (*state).is_darkmode = true;
+
+    app.emit(
+        GlobalEvents::SettingsUpdated.as_str(),
+        state.clone()
+    )
+    .unwrap();
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -36,7 +48,7 @@ pub fn run() {
                 ))
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![greet, get_settings])
+        .invoke_handler(tauri::generate_handler![greet, get_settings, test_change_settings])
         .setup(|app| {
             let app_handle = app.app_handle();
             let app_settings =
@@ -55,11 +67,6 @@ pub fn run() {
             // println!("{}", app_settings);
             app.manage(Mutex::new(app_settings.clone()));
 
-            app.emit(
-                GlobalEvents::SettingsUpdated.as_str(),
-                get_settings(app.state()),
-            )
-            .unwrap();
             Ok(())
         })
         .run(tauri::generate_context!())
