@@ -1,13 +1,10 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-
 use std::sync::Mutex;
 
-use log::info;
+use log::{error, info};
 use tauri::{AppHandle, Emitter, Manager, State};
 
 use crate::{constants::GlobalEvents, settings::AppSettings};
 
-mod commands;
 mod constants;
 mod error;
 mod settings;
@@ -19,27 +16,12 @@ fn greet(state: State<'_, Mutex<AppSettings>>, name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-#[tauri::command]
-fn get_settings(state: State<'_, Mutex<AppSettings>>) -> AppSettings {
-    let state = state.lock().expect("Should be able to aquire lock");
-    state.clone()
-}
 
-#[tauri::command]
-fn test_change_settings(app: AppHandle, state: State<'_, Mutex<AppSettings>>) {
-    let mut state = state.lock().expect("Should be able to aquire lock");
-    (*state).is_darkmode = true;
-
-    app.emit(
-        GlobalEvents::SettingsUpdated.as_str(),
-        state.clone()
-    )
-    .unwrap();
-}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(
             tauri_plugin_log::Builder::new()
@@ -48,7 +30,12 @@ pub fn run() {
                 ))
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![greet, get_settings, test_change_settings])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            settings::get_settings,
+            settings::test_change_settings,
+            settings::pick_project_folder
+        ])
         .setup(|app| {
             let app_handle = app.app_handle();
             let app_settings =

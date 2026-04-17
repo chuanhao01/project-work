@@ -19,9 +19,10 @@ export function AppSettingsProvider({ children, ...props }: PropsWithChildren) {
   const [appSettings, setAppSettings] = useState<AppSettings>(initialState);
   useEffect(() => {
     // Call to set it up once
-    invoke<AppSettings>(COMMANDS.GET_SETTINGS).then((updatedAppSettings) =>
-      setAppSettings(updatedAppSettings),
-    );
+    invoke<AppSettings>(COMMANDS.GET_SETTINGS).then((updatedAppSettings) => {
+      console.log(updatedAppSettings);
+      setAppSettings(updatedAppSettings);
+    });
     // Listen for any subsequent updates
     listen<AppSettings>(
       GLOBAL_EVENTS.settingsUpdated,
