@@ -67,7 +67,7 @@ impl AppSettings {
 #[tauri::command]
 pub fn test_change_settings(app: AppHandle, state: State<'_, Mutex<AppSettings>>) {
     let mut state = state.lock().expect("Should be able to aquire lock");
-    (*state).is_darkmode = true;
+    state.is_darkmode = true;
 
     app.emit(GlobalEvents::SettingsUpdated.as_str(), state.clone())
         .unwrap();

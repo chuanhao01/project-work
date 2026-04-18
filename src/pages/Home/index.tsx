@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAppSettings } from "@/components/AppSettingsProvider";
 import { Button } from "@/components/ui/button";
@@ -8,9 +8,11 @@ function App() {
   const appSettings = useAppSettings();
   const navigate = useNavigate();
   const [msg, setMsg] = useState("");
-  if (appSettings.project_folder !== null){
-    navigate("project");
-  }
+  useEffect(() => {
+    if (appSettings.project_folder !== null) {
+      navigate("project");
+    }
+  }, [appSettings, navigate]);
   return (
     <div className="flex h-screen flex-col items-center justify-center gap-4">
       <h1 className="font-bold text-4xl">Home</h1>
@@ -30,7 +32,7 @@ function App() {
           await invoke("pick_project_folder");
         }}
       >
-        Test Folder Picker
+        Pick a project folder
       </Button>
       <Link to="project">Project</Link>
     </div>
